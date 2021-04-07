@@ -25,6 +25,8 @@ public class CountryTemperatureService {
 
   private static final String WEATHER_URL = "http://www.weather.com.cn/data/sk/%s.html";
 
+  private static final String INCORRECT_PLACE_INFO = "Please input correct place name";
+
   private String readAll(final Reader rd) throws IOException {
     final StringBuilder sb = new StringBuilder();
     int cp;
@@ -76,9 +78,9 @@ public class CountryTemperatureService {
         }
       }
     } catch (final JSONException e) {
-      throw new ResourceNotFoundException("Please input correct place name", "place name");
+      throw new ResourceNotFoundException(INCORRECT_PLACE_INFO, name);
     }
-    throw new ResourceNotFoundException("Please input correct place name", "place name");
+    throw new ResourceNotFoundException(INCORRECT_PLACE_INFO, name);
   }
 
   public int getTemperature(final String province, final String city, final String county) {
@@ -100,7 +102,7 @@ public class CountryTemperatureService {
       final String weatherInfo = (String) ((JSONObject) weatherJson.get("weatherinfo")).get("temp");
       return (int) Math.floor(Float.parseFloat(weatherInfo));
     } catch (final JSONException e) {
-      throw new ResourceNotFoundException("Please input correct place name", "place name");
+      throw new ResourceNotFoundException(INCORRECT_PLACE_INFO, county);
     }
   }
 }
